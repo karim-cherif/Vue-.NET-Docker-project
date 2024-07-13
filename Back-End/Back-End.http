@@ -1,0 +1,6 @@
+@Back_End_HostAddress = http://localhost:5171
+
+GET {{Back_End_HostAddress}}/person/
+Accept: application/json
+
+###
