@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -32,22 +28,10 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAAAEUAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADcAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-13T01:49:11.58Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PersonController.cs",
-              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Controllers\\PersonController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PersonController.cs",
-              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Controllers\\PersonController.cs",
-              "RelativeToolTip": "Controllers\\PersonController.cs",
-              "ViewState": "AQIAABIAAAAAAAAAAAAAABYAAABQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-12T16:57:31.219Z"
             }
           ]
         },
