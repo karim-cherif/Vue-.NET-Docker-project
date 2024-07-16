@@ -19,17 +19,16 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IpersonRepository, PersonRepository>();
 
 //added cors
-/*
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://frontend:8080")
+            policy.WithOrigins("http://localhost:8080")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
-});*/
+});
 
 var app = builder.Build();
 
@@ -60,7 +59,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 //cors
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(origin => true));
+app.UseCors();
+
+//alternate methode-allows all to comsume api
+//app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed(origin => true));
 
 app.UseAuthorization();
 

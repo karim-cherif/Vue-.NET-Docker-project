@@ -1,15 +1,4 @@
 services:
-  frontend:
-    build:
-      context: ./Front-End
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - backend
-    #networks:
-      #- app_network
-
   backend:
     build:
       context: ./Back-End
@@ -21,6 +10,17 @@ services:
       - ConnectionStrings__DefaultConnection=Server=db;Database=peopleDB;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
     depends_on:
       - db
+    #networks:
+      #- app_network
+
+  frontend:
+    build:
+      context: ./Front-End
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
     #networks:
       #- app_network
 
