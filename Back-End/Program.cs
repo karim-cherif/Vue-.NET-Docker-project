@@ -24,11 +24,16 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:8080")
+            policy.WithOrigins("https://frontend-app.mangobay-3a85b446.northeurope.azurecontainerapps.io/")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
 });
+//containerized
+//"http://localhost:8080"
+
+//azure
+//https://frontend-app.mangobay-3a85b446.northeurope.azurecontainerapps.io/
 
 var app = builder.Build();
 
