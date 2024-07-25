@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
 //"http://localhost:8080"
 
 //azure
-//https://frontend-app.mangobay-3a85b446.northeurope.azurecontainerapps.io/
+//https://myapp-front.thankfulbush-6e078cc6.northeurope.azurecontainerapps.io/
 
 var app = builder.Build();
 
@@ -45,7 +45,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDBContext>();
         context.Database.Migrate();
-        Console.WriteLine("Database migrated successfully.");
+        Console.WriteLine("Database migrated successfully2.");
     }
     catch (Exception ex)
     {

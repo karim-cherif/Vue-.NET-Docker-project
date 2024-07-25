@@ -11,7 +11,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 axios.defaults.baseURL = "http://localhost:5000";
 
 //azure
-//axios.defaults.baseURL = "https://backend-app.internal.mangobay-3a85b446.northeurope.azurecontainerapps.io/";
+//axios.defaults.baseURL = "https://myapp-back.thankfulbush-6e078cc6.northeurope.azurecontainerapps.io";
 
 const app = createApp(App);
 app.use(router);

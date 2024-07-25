@@ -4,6 +4,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 # Set the working directory in the container
 WORKDIR /app
 
+# Set the ASP.NET Core URLs to listen on port 3000
+ENV ASPNETCORE_URLS=http://+:3000
+
 # Copy the project file and restore dependencies
 COPY *.csproj ./
 RUN dotnet restore
@@ -24,7 +27,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Expose the port the app runs on
-EXPOSE 80
+EXPOSE 3000
 
 # Define the command to run the app
 ENTRYPOINT ["dotnet", "Back-End.dll"]
