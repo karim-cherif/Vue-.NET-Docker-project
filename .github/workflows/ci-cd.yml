@@ -77,14 +77,20 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Restart backend container app
+    - name: Update backend container app
       uses: azure/CLI@v2
       with:
         inlineScript: |
-          az containerapp restart --name myapp-back --resource-group internship-group
+          az containerapp update \
+            --name myapp-back \
+            --resource-group YOUR_RESOURCE_GROUP \
+            --image abdelkarim246/internship-back:latest
 
-    - name: Restart frontend container app
+    - name: Update frontend container app
       uses: azure/CLI@v2
       with:
         inlineScript: |
-          az containerapp restart --name myapp-front --resource-group internship-group
+          az containerapp update \
+            --name myapp-front \
+            --resource-group YOUR_RESOURCE_GROUP \
+            --image abdelkarim246/internship-front:latest
