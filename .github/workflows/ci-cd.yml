@@ -54,14 +54,14 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push backend image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v6
       with:
         context: ./Back-End
         push: true
         tags: abdelkarim246/internship-back:latest
 
     - name: Build and push frontend image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v6
       with:
         context: ./Front-End
         push: true
@@ -73,18 +73,18 @@ jobs:
     
     steps:
     - name: Azure login
-      uses: azure/login@v4
+      uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Restart backend container app
-      uses: azure/CLI@v4
+      uses: azure/CLI@v2
       with:
         inlineScript: |
           az containerapp restart --name myapp-back --resource-group internship-group
 
     - name: Restart frontend container app
-      uses: azure/CLI@v4
+      uses: azure/CLI@v2
       with:
         inlineScript: |
           az containerapp restart --name myapp-front --resource-group internship-group
