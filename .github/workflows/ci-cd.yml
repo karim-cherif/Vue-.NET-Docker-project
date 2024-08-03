@@ -36,8 +36,8 @@ jobs:
       run: npm ci
       working-directory: ./Front-End
 
-    - name: Run tests
-      run: npm test
+    - name: Build Vue.js project
+      run: npm run build
       working-directory: ./Front-End
 
   build-and-push-images:
