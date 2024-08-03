@@ -8,10 +8,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // axios.defaults.baseURL = "https://localhost:7056";
 
 //containerized
-axios.defaults.baseURL = "http://localhost:5000";
+//axios.defaults.baseURL = "http://localhost:5000";
 
 //azure
-//axios.defaults.baseURL = "https://myapp-back.thankfulbush-6e078cc6.northeurope.azurecontainerapps.io";
+axios.defaults.baseURL =
+  "https://myapp-back.thankfulbush-6e078cc6.northeurope.azurecontainerapps.io";
 
 const app = createApp(App);
 app.use(router);

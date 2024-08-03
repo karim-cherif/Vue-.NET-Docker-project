@@ -9,6 +9,6 @@ namespace Back_End.Interfaces
         Task<Person?> GetPersonByIdAsync(int Id);
         Task<Person> CreatePersonAsync(CreatePersonDto createPersonDto);
         Task<Person?> UpdatePersonAsync(int id,UpdatePersonDto updatePersonDto);
-        Task<Person> DeletePersonAsync(int Id);
+        Task<Person?> DeletePersonAsync(int Id);
     }
 }

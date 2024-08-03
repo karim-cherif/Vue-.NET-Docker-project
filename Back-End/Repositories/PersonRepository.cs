@@ -21,7 +21,7 @@ namespace Back_End.Repositories
             await _context.SaveChangesAsync();
             return person;
         }
-        public async Task<Person> DeletePersonAsync(int Id)
+        public async Task<Person?> DeletePersonAsync(int Id)
         {
             var person = await _context.People.FirstOrDefaultAsync(x => x.Id == Id);
             if (person == null)
