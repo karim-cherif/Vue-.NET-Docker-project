@@ -80,6 +80,7 @@ jobs:
     - name: Update backend container app
       uses: azure/CLI@v2
       with:
+        azcliversion: latest
         inlineScript: |
           az containerapp update \
             --name myapp-back \
@@ -89,6 +90,7 @@ jobs:
     - name: Update frontend container app
       uses: azure/CLI@v2
       with:
+        azcliversion: latest
         inlineScript: |
           az containerapp update \
             --name myapp-front \
