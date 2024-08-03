@@ -2,97 +2,97 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
 
-    - name: Restore dependencies
-      run: dotnet restore ./Back-End/Back-End.csproj
+      - name: Restore dependencies
+        run: dotnet restore ./Back-End/Back-End.csproj
 
-    - name: Build
-      run: dotnet build ./Back-End/Back-End.csproj --no-restore
+      - name: Build
+        run: dotnet build ./Back-End/Back-End.csproj --no-restore
 
-    - name: Test
-      run: dotnet test ./Back-End/Back-End.csproj --no-build --verbosity normal
+      - name: Test
+        run: dotnet test ./Back-End/Back-End.csproj --no-build --verbosity normal
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ./Front-End
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./Front-End
 
-    - name: Build Vue.js project
-      run: npm run build
-      working-directory: ./Front-End
+      - name: Build Vue.js project
+        run: npm run build
+        working-directory: ./Front-End
 
   build-and-push-images:
     needs: build-and-test
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push backend image
-      uses: docker/build-push-action@v6
-      with:
-        context: ./Back-End
-        push: true
-        tags: abdelkarim246/internship-back:latest
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Back-End
+          push: true
+          tags: abdelkarim246/internship-back:latest
 
-    - name: Build and push frontend image
-      uses: docker/build-push-action@v6
-      with:
-        context: ./Front-End
-        push: true
-        tags: abdelkarim246/internship-front:latest
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Front-End
+          push: true
+          tags: abdelkarim246/internship-front:latest
 
   deploy:
     needs: build-and-push-images
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Azure login
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Update backend container app
-      uses: azure/CLI@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az containerapp update \
-            --name myapp-back \
-            --resource-group internship-group \
-            --image abdelkarim246/internship-back:latest
+      - name: Update backend container app
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az containerapp update \
+              --name myapp-back \
+              --resource-group internship-group \
+              --image abdelkarim246/internship-back:latest
 
-    - name: Update frontend container app
-      uses: azure/CLI@v2
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az containerapp update \
-            --name myapp-front \
-            --resource-group internship-group \
-            --image abdelkarim246/internship-front:latest
+      - name: Update frontend container app
+        uses: azure/CLI@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az containerapp update \
+              --name myapp-front \
+              --resource-group internship-group \
+              --image abdelkarim246/internship-front:latest
