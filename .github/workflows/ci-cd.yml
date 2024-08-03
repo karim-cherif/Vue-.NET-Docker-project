@@ -83,7 +83,7 @@ jobs:
         inlineScript: |
           az containerapp update \
             --name myapp-back \
-            --resource-group YOUR_RESOURCE_GROUP \
+            --resource-group internship-group \
             --image abdelkarim246/internship-back:latest
 
     - name: Update frontend container app
@@ -92,5 +92,5 @@ jobs:
         inlineScript: |
           az containerapp update \
             --name myapp-front \
-            --resource-group YOUR_RESOURCE_GROUP \
+            --resource-group internship-group \
             --image abdelkarim246/internship-front:latest
