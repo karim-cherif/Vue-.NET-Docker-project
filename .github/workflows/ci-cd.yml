@@ -96,3 +96,41 @@ jobs:
               --name myapp-front \
               --resource-group internship-group \
               --image abdelkarim246/internship-front:latest
+
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get commit changes
+        id: get_changes
+        run: |
+          git fetch --prune --unshallow
+          echo "COMMIT_LOG=$(git log --format="%h - %s" -n 5)" >> $GITHUB_OUTPUT
+
+      - name: Send notification email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.EMAIL_USER}}
+          password: ${{secrets.EMAIL_PASS}}
+          subject: CI/CD Pipeline Status for ${{github.repository}}
+          body: |
+            CI/CD Pipeline for ${{github.repository}} has completed.
+
+            Status:
+            - Build and Test: ${{ needs.build-and-test.result }}
+            - Build and Push Images: ${{ needs.build-and-push-images.result }}
+            - Deploy: ${{ needs.deploy.result }}
+
+            Recent changes:
+            ${{ steps.get_changes.outputs.COMMIT_LOG }}
+
+            For more details, please check: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
+          to: abedelcarimc@gmail.com
+          from: GitHub Actions
