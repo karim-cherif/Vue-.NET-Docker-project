@@ -105,23 +105,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get commit changes
         id: get_changes
         run: |
-          git fetch --prune --unshallow
-          echo "COMMIT_LOG=$(git log --format="%h - %s" -n 5)" >> $GITHUB_OUTPUT
+          COMMIT_LOG=$(git log -n 5 --pretty=format:"%h - %s")
+          echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMIT_LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send notification email
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{secrets.EMAIL_USER}}
-          password: ${{secrets.EMAIL_PASS}}
-          subject: CI/CD Pipeline Status for ${{github.repository}}
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASS }}
+          subject: CI/CD Pipeline Status for ${{ github.repository }}
           body: |
-            CI/CD Pipeline for ${{github.repository}} has completed.
+            CI/CD Pipeline for ${{ github.repository }} has completed.
 
             Status:
             - Build and Test: ${{ needs.build-and-test.result }}
@@ -131,6 +135,6 @@ jobs:
             Recent changes:
             ${{ steps.get_changes.outputs.COMMIT_LOG }}
 
-            For more details, please check: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
-          to: abedelcarimc@gmail.com
+            For more details, please check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          to: ${{ secrets.EMAIL_RECIPIENTS }}
           from: GitHub Actions
