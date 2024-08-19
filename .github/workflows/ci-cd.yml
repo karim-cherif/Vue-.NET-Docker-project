@@ -168,7 +168,7 @@ jobs:
             </head>
             <body>
               <div class="container">
-                <h1>CI/CD Pipeline Status for ${{ github.repository }}</h1>
+                <h1>CI/CD Pipeline Status for ${github.repository}</h1>
                 <div class="status">
                   <p><strong>Build and Test:</strong> ${getStatusEmoji(buildStatus)} ${buildStatus}</p>
                   <p><strong>Build and Push Images:</strong> ${getStatusEmoji(imageStatus)} ${imageStatus}</p>
@@ -176,11 +176,11 @@ jobs:
                 </div>
                 <div class="changes">
                   <h2>Recent Changes</h2>
-                  <pre>${'$' + '{{ steps.get_changes.outputs.COMMIT_LOG }}'.replace(/\n/g, '<br>')}</pre>
-                  <p><strong>Summary:</strong> ${'$' + '{{ steps.diff_summary.outputs.DIFF_SUMMARY }}'}</p>
+                  <pre>${steps.get_changes.outputs.COMMIT_LOG.replace(/\n/g, '<br>')}</pre>
+                  <p><strong>Summary:</strong> ${steps.diff_summary.outputs.DIFF_SUMMARY}</p>
                 </div>
                 <div class="footer">
-                  <p>For more details, please check: <a href="${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
+                  <p>For more details, please check: <a href="${github.server_url}/${github.repository}/actions/runs/${github.run_id}">${github.server_url}/${github.repository}/actions/runs/${github.run_id}</a></p>
                 </div>
               </div>
             </body>
@@ -188,12 +188,12 @@ jobs:
             `;
 
             const msg = {
-              to: '${{ secrets.EMAIL_RECIPIENTS }}',
+              to: process.env.EMAIL_RECIPIENTS,
               from: {
-                email: '${{ secrets.SENDGRID_VERIFIED_SENDER }}',
+                email: process.env.SENDGRID_VERIFIED_SENDER,
                 name: 'CI/CD Pipeline Notifier'
               },
-              subject: 'CI/CD Pipeline Status for ${{ github.repository }}',
+              subject: `CI/CD Pipeline Status for ${github.repository}`,
               text: 'This is an HTML email. Please use an HTML-capable email client to view it.',
               html: htmlContent,
             };
