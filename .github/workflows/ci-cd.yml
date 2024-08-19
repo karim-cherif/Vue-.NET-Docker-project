@@ -92,12 +92,14 @@ jobs:
         id: commit_info
         run: |
           echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
-          git log -n 5 --pretty=format:'- %h - %s (%an)%0A' >> $GITHUB_OUTPUT
+          git log -n 5 --pretty=format:'- %h - %s (%an)' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+
           echo "DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
+
       - name: Send notification email
         uses: dawidd6/action-send-mail@v3
         with:
