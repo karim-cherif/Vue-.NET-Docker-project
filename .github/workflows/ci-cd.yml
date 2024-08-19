@@ -180,7 +180,7 @@ jobs:
                   <p><strong>Summary:</strong> ${'$' + '{{ steps.diff_summary.outputs.DIFF_SUMMARY }}'}</p>
                 </div>
                 <div class="footer">
-                  <p>For more details, please check: <a href="${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
+                  <p>For more details, please check: <a href="${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
                 </div>
               </div>
             </body>
