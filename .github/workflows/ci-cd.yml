@@ -21,8 +21,10 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore ./Back-End/Back-End.csproj
+
       - name: Build
         run: dotnet build ./Back-End/Back-End.csproj --no-restore
+
       - name: Test
         run: dotnet test ./Back-End/Back-End.csproj --no-build --verbosity normal
 
@@ -34,6 +36,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
         working-directory: ./Front-End
+
       - name: Build Vue.js project
         run: npm run build
         working-directory: ./Front-End
@@ -173,11 +176,11 @@ jobs:
                 </div>
                 <div class="changes">
                   <h2>Recent Changes</h2>
-                  <pre>${'${{ steps.get_changes.outputs.COMMIT_LOG }}'.replace(/\n/g, '<br>')}</pre>
-                  <p><strong>Summary:</strong> ${{ steps.diff_summary.outputs.DIFF_SUMMARY }}</p>
+                  <pre>${'$' + '{{ steps.get_changes.outputs.COMMIT_LOG }}'.replace(/\n/g, '<br>')}</pre>
+                  <p><strong>Summary:</strong> ${'$' + '{{ steps.diff_summary.outputs.DIFF_SUMMARY }}'}</p>
                 </div>
                 <div class="footer">
-                  <p>For more details, please check: <a href="${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
+                  <p>For more details, please check: <a href="${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'$' + '{{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
                 </div>
               </div>
             </body>
