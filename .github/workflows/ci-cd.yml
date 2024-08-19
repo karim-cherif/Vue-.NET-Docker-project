@@ -6,125 +6,98 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  DOTNET_VERSION: "8.0.x"
+  NODE_VERSION: "20"
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ job.status }}
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
-
-      - name: Restore dependencies
-        run: dotnet restore ./Back-End/Back-End.csproj
-
-      - name: Build
-        run: dotnet build ./Back-End/Back-End.csproj --no-restore
-
-      - name: Test
-        run: dotnet test ./Back-End/Back-End.csproj --no-build --verbosity normal
-
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Restore, Build and Test Backend
+        run: |
+          dotnet restore ./Back-End/Back-End.csproj
+          dotnet build ./Back-End/Back-End.csproj --no-restore
+          dotnet test ./Back-End/Back-End.csproj --no-build --verbosity normal
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm ci
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: "./Front-End/package-lock.json"
+      - name: Install and Build Frontend
         working-directory: ./Front-End
-
-      - name: Build Vue.js project
-        run: npm run build
-        working-directory: ./Front-End
+        run: |
+          npm ci
+          npm run build
 
   build-and-push-images:
     needs: build-and-test
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ job.status }}
     steps:
       - uses: actions/checkout@v4
-
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Build and push backend image
         uses: docker/build-push-action@v6
         with:
           context: ./Back-End
           push: true
           tags: abdelkarim246/internship-back:latest
-
+          cache-from: type=registry,ref=abdelkarim246/internship-back:latest
+          cache-to: type=inline
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
           context: ./Front-End
           push: true
           tags: abdelkarim246/internship-front:latest
+          cache-from: type=registry,ref=abdelkarim246/internship-front:latest
+          cache-to: type=inline
 
   deploy:
     needs: build-and-push-images
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ job.status }}
     steps:
       - name: Azure login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Update backend container app
-        uses: azure/cli@v2
+      - name: Update container apps
+        uses: azure/CLI@v2
         with:
-          azcliversion: latest
           inlineScript: |
-            az containerapp update \
-              --name myapp-back \
-              --resource-group internship-group \
-              --image abdelkarim246/internship-back:latest
-
-      - name: Update frontend container app
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az containerapp update \
-              --name myapp-front \
-              --resource-group internship-group \
-              --image abdelkarim246/internship-front:latest
+            az containerapp update --name myapp-back --resource-group internship-group --image abdelkarim246/internship-back:latest
+            az containerapp update --name myapp-front --resource-group internship-group --image abdelkarim246/internship-front:latest
 
   notify:
     needs: [build-and-test, build-and-push-images, deploy]
     runs-on: ubuntu-latest
     if: always()
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Get commit changes
-        id: get_changes
+      - name: Get commit information
+        id: commit_info
         run: |
-          COMMIT_LOG=$(git log -n 5 --pretty=format:"- %h - %s (%an)")
           echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
-          echo "$COMMIT_LOG" >> $GITHUB_OUTPUT
+          git log -n 5 --pretty=format:"- %h - %s (%an)" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Get diff summary
-        id: diff_summary
-        run: |
-          DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)
-          echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_OUTPUT
-
+          echo "DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)" >> $GITHUB_OUTPUT
+          echo "LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
+          echo "LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
       - name: Send notification email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -133,25 +106,30 @@ jobs:
           secure: true
           username: apikey
           password: ${{ secrets.SENDGRID_API_KEY }}
-          subject: CI/CD Pipeline Status for ${{ github.repository }}
-          body: |
-            CI/CD Pipeline for ${{ github.repository }} has completed.
+          subject: CI/CD Pipeline Status - ${{ github.repository }} - ${{ steps.commit_info.outputs.LATEST_COMMIT_HASH }}
+          html_body: |
+            <html>
+            <body style="font-family: Arial, sans-serif;">
+              <h2>CI/CD Pipeline Status for ${{ github.repository }}</h2>
+              <p><strong>Latest Commit:</strong> ${{ steps.commit_info.outputs.LATEST_COMMIT_HASH }} - ${{ steps.commit_info.outputs.LATEST_COMMIT_MESSAGE }} (by ${{ steps.commit_info.outputs.LATEST_COMMIT_AUTHOR }})</p>
+              
+              <h3>Status Summary:</h3>
+              <ul>
+                <li>Build and Test: ${{ needs.build-and-test.result }}</li>
+                <li>Build and Push Images: ${{ needs.build-and-push-images.result }}</li>
+                <li>Deploy: ${{ needs.deploy.result }}</li>
+              </ul>
 
-            Status Summary:
-            - Build and Test: ${{ needs.build-and-test.outputs.status }}
-            - Build and Push Images: ${{ needs.build-and-push-images.outputs.status }}
-            - Deploy: ${{ needs.deploy.outputs.status }}
+              <h3>Recent Changes:</h3>
+              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px;">${{ steps.commit_info.outputs.COMMIT_LOG }}</pre>
 
-            Recent Changes:
-            ${{ steps.get_changes.outputs.COMMIT_LOG }}
+              <p><strong>Changes Summary:</strong> ${{ steps.commit_info.outputs.DIFF_SUMMARY }}</p>
 
-            Changes Summary:
-            ${{ steps.diff_summary.outputs.DIFF_SUMMARY }}
+              <p>For more details, please visit: <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}</a></p>
 
-            For more details, please visit:
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-            ---
-            This is an automated message from your CI/CD pipeline.
+              <hr>
+              <p style="font-size: 0.8em; color: #666;">This is an automated message from your CI/CD pipeline.</p>
+            </body>
+            </html>
           to: ${{ secrets.EMAIL_RECIPIENTS }}
           from: CI/CD Pipeline <${{ secrets.SENDGRID_VERIFIED_SENDER }}>
