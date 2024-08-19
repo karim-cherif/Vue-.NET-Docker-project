@@ -91,7 +91,9 @@ jobs:
       - name: Get commit information
         id: commit_info
         run: |
-          echo "COMMIT_LOG=$(git log -n 5 --pretty=format:'- %h - %s (%an)%0A' | sed ':a;N;$!ba;s/\n/%0A/g')" >> $GITHUB_OUTPUT
+          echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
+          git log -n 5 --pretty=format:'- %h - %s (%an)%0A' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           echo "DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
