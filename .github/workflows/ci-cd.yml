@@ -81,62 +81,62 @@ jobs:
             az containerapp update --name myapp-front --resource-group internship-group --image abdelkarim246/internship-front:latest
 
   notify:
-  needs: [build-and-test, build-and-push-images, deploy]
-  runs-on: ubuntu-latest
-  if: always()
-  steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Get commit information
-      id: commit_info
-      run: |
-        COMMIT_LOG=$(git log -n 5 --pretty=format:'- %h - %s (%an)')
-        echo "COMMIT_LOG=$COMMIT_LOG" >> $GITHUB_ENV
+    needs: [build-and-test, build-and-push-images, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get Commit Information
+        id: commit_info
+        run: |
+          COMMIT_LOG=$(git log -n 5 --pretty=format:'- %h - %s (%an)')
+          echo "COMMIT_LOG=$COMMIT_LOG" >> $GITHUB_ENV
 
-        DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)
-        echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_ENV
+          DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)
+          echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_ENV
 
-        LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)
-        echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH" >> $GITHUB_ENV
+          LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)
+          echo "LATEST_COMMIT_HASH=$LATEST_COMMIT_HASH" >> $GITHUB_ENV
 
-        LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
-        echo "LATEST_COMMIT_AUTHOR=$LATEST_COMMIT_AUTHOR" >> $GITHUB_ENV
+          LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
+          echo "LATEST_COMMIT_AUTHOR=$LATEST_COMMIT_AUTHOR" >> $GITHUB_ENV
 
-        LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
-        echo "LATEST_COMMIT_MESSAGE=$LATEST_COMMIT_MESSAGE" >> $GITHUB_ENV
-    - name: Send notification email
-      uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: smtp.sendgrid.net
-        server_port: 465
-        secure: true
-        username: apikey
-        password: ${{ secrets.SENDGRID_API_KEY }}
-        subject: CI/CD Pipeline Status - ${{ github.repository }} - ${{ env.LATEST_COMMIT_HASH }}
-        html_body: |
-          <html>
-          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-            <h2 style="color: #0066cc;">CI/CD Pipeline Status for ${{ github.repository }}</h2>
-            <p><strong>Latest Commit:</strong> ${{ env.LATEST_COMMIT_HASH }} - ${{ env.LATEST_COMMIT_MESSAGE }} (by ${{ env.LATEST_COMMIT_AUTHOR }})</p>
-            
-            <h3 style="color: #0066cc;">Status Summary:</h3>
-            <ul>
-              <li>Build and Test: <span style="color: ${{ needs.build-and-test.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.build-and-test.result }}</span></li>
-              <li>Build and Push Images: <span style="color: ${{ needs.build-and-push-images.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.build-and-push-images.result }}</span></li>
-              <li>Deploy: <span style="color: ${{ needs.deploy.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.deploy.result }}</span></li>
-            </ul>
+          LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
+          echo "LATEST_COMMIT_MESSAGE=$LATEST_COMMIT_MESSAGE" >> $GITHUB_ENV
+      - name: Send Notification Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.sendgrid.net
+          server_port: 465
+          secure: true
+          username: apikey
+          password: ${{ secrets.SENDGRID_API_KEY }}
+          subject: CI/CD Pipeline Status - ${{ github.repository }} - ${{ env.LATEST_COMMIT_HASH }}
+          html_body: |
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+              <h2 style="color: #0066cc;">CI/CD Pipeline Status for ${{ github.repository }}</h2>
+              <p><strong>Latest Commit:</strong> ${{ env.LATEST_COMMIT_HASH }} - ${{ env.LATEST_COMMIT_MESSAGE }} (by ${{ env.LATEST_COMMIT_AUTHOR }})</p>
+              
+              <h3 style="color: #0066cc;">Status Summary:</h3>
+              <ul>
+                <li>Build and Test: <span style="color: ${{ needs.build-and-test.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.build-and-test.result }}</span></li>
+                <li>Build and Push Images: <span style="color: ${{ needs.build-and-push-images.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.build-and-push-images.result }}</span></li>
+                <li>Deploy: <span style="color: ${{ needs.deploy.result == 'success' && '#2ecc71' || '#e74c3c' }};">${{ needs.deploy.result }}</span></li>
+              </ul>
 
-            <h3 style="color: #0066cc;">Recent Changes:</h3>
-            <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">${{ env.COMMIT_LOG }}</pre>
+              <h3 style="color: #0066cc;">Recent Changes:</h3>
+              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">${{ env.COMMIT_LOG }}</pre>
 
-            <p><strong>Changes Summary:</strong> ${{ env.DIFF_SUMMARY }}</p>
+              <p><strong>Changes Summary:</strong> ${{ env.DIFF_SUMMARY }}</p>
 
-            <p>For more details, please visit: <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #0066cc;">${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}</a></p>
+              <p>For more details, please visit: <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #0066cc;">${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}</a></p>
 
-            <hr style="border: none; border-top: 1px solid #ddd;">
-            <p style="font-size: 0.8em; color: #666;">This is an automated message from your CI/CD pipeline.</p>
-          </body>
-          </html>
-        to: ${{ secrets.EMAIL_RECIPIENTS }}
-        from: CI/CD Pipeline <${{ secrets.SENDGRID_VERIFIED_SENDER }}>
+              <hr style="border: none; border-top: 1px solid #ddd;">
+              <p style="font-size: 0.8em; color: #666;">This is an automated message from your CI/CD pipeline.</p>
+            </body>
+            </html>
+          to: ${{ secrets.EMAIL_RECIPIENTS }}
+          from: CI/CD Pipeline <${{ secrets.SENDGRID_VERIFIED_SENDER }}>
