@@ -120,6 +120,7 @@ jobs:
         run: |
           COMMIT_LOG=$(git log -n 5 --pretty=format:"%h - %s (%an)")
           echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
+          echo "COMMIT_LOG=$COMMIT_LOG" >> $GITHUB_ENV
           echo "$COMMIT_LOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -128,7 +129,7 @@ jobs:
         run: |
           DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)
           echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_OUTPUT
-
+          echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_ENV
       - name: Send notification email
         uses: actions/github-script@v7
         with:
