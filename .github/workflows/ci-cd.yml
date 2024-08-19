@@ -101,7 +101,7 @@ jobs:
               --image abdelkarim246/internship-front:latest
 
   notify:
-    needs: deploy
+    needs: [build-and-test, build-and-push-images, deploy]
     runs-on: ubuntu-latest
     if: always()
 
@@ -131,16 +131,16 @@ jobs:
           server_address: smtp.sendgrid.net
           server_port: 465
           secure: true
-          username: apikey
+          username: ${{ secrets.SENDGRID_VERIFIED_SENDER }}
           password: ${{ secrets.SENDGRID_API_KEY }}
           subject: CI/CD Pipeline Status for ${{ github.repository }}
           body: |
             CI/CD Pipeline for ${{ github.repository }} has completed.
 
             Status Summary:
-            - Build and Test: ${{ needs.build-and-test.result }}
-            - Build and Push Images: ${{ needs.build-and-push-images.result }}
-            - Deploy: ${{ needs.deploy.result }}
+            - Build and Test: ${{ needs.build-and-test.outputs.status }}
+            - Build and Push Images: ${{ needs.build-and-push-images.outputs.status }}
+            - Deploy: ${{ needs.deploy.outputs.status }}
 
             Recent Changes:
             ${{ steps.get_changes.outputs.COMMIT_LOG }}
