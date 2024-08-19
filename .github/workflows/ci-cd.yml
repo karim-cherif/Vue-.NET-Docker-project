@@ -149,6 +149,8 @@ jobs:
             const buildStatus = process.env.BUILD_STATUS;
             const imageStatus = process.env.IMAGE_STATUS;
             const deployStatus = process.env.DEPLOY_STATUS;
+            const commitLog = process.env.COMMIT_LOG.replace(/\n/g, '<br>');
+            const diffSummary = process.env.DIFF_SUMMARY;
 
             const htmlContent = `
             <!DOCTYPE html>
@@ -176,8 +178,8 @@ jobs:
                 </div>
                 <div class="changes">
                   <h2>Recent Changes</h2>
-                  <pre>${'${{ steps.get_changes.outputs.COMMIT_LOG }}'.replace(/\n/g, '<br>')}</pre>
-                  <p><strong>Summary:</strong> ${'${{ steps.diff_summary.outputs.DIFF_SUMMARY }}'}</p>
+                  <pre>${commitLog}</pre>
+                  <p><strong>Summary:</strong> ${diffSummary}</p>
                 </div>
                 <div class="footer">
                   <p>For more details, please check: <a href="${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
