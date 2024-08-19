@@ -97,13 +97,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get commit details
-        id: commit_details
+      - name: Get commit changes
+        id: get_changes
         run: |
-          echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:%s)" >> $GITHUB_OUTPUT
-          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
-          echo "COMMIT_DATE=$(git log -1 --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%cd')" >> $GITHUB_OUTPUT
+          COMMIT_LOG=$(git log -n 5 --pretty=format:"- %h - %s (%an)")
+          echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMIT_LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Get diff summary
         id: diff_summary
@@ -119,31 +119,25 @@ jobs:
           secure: true
           username: apikey
           password: ${{ secrets.SENDGRID_API_KEY }}
-          subject: "CI/CD Pipeline: ${{ github.repository }} - ${{ steps.commit_details.outputs.COMMIT_MESSAGE }}"
-          html_body: |
-            <h2>CI/CD Pipeline Notification</h2>
-            <p><strong>Repository:</strong> ${{ github.repository }}</p>
-            <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
-            <p><strong>Commit:</strong> <a href="${{ github.server_url }}/${{ github.repository }}/commit/${{ steps.commit_details.outputs.COMMIT_HASH }}">{{ steps.commit_details.outputs.COMMIT_HASH }}</a> - ${{ steps.commit_details.outputs.COMMIT_MESSAGE }}</p>
-            <p><strong>Author:</strong> ${{ steps.commit_details.outputs.COMMIT_AUTHOR }}</p>
-            <p><strong>Date:</strong> ${{ steps.commit_details.outputs.COMMIT_DATE }}</p>
+          subject: CI/CD Pipeline Status for ${{ github.repository }}
+          body: |
+            CI/CD Pipeline for ${{ github.repository }} has completed.
 
-            <h3>Pipeline Status</h3>
-            <ul>
-              <li><strong>Build and Test:</strong> ${{ needs.build-and-test.outputs.status }}</li>
-              <li><strong>Build and Push Images:</strong> ${{ needs.build-and-push-images.outputs.status }}</li>
-              <li><strong>Deploy:</strong> ${{ needs.deploy.outputs.status }}</li>
-            </ul>
+            Status Summary:
+            - Build and Test: ${{ needs.build-and-test.outputs.status }}
+            - Build and Push Images: ${{ needs.build-and-push-images.outputs.status }}
+            - Deploy: ${{ needs.deploy.outputs.status }}
 
-            <h3>Recent Changes</h3>
-            <pre>{{ steps.commit_details.outputs.COMMIT_MESSAGE }}</pre>
+            Recent Changes:
+            ${{ steps.get_changes.outputs.COMMIT_LOG }}
 
-            <h3>Summary of Changes</h3>
-            <pre>{{ steps.diff_summary.outputs.DIFF_SUMMARY }}</pre>
+            Changes Summary:
+            ${{ steps.diff_summary.outputs.DIFF_SUMMARY }}
 
-            <p>For more details, please visit: <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Pipeline Run</a></p>
+            For more details, please visit:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            <hr>
-            <p>This is an automated message from your CI/CD pipeline.</p>
+            ---
+            This is an automated message from your CI/CD pipeline.
           to: ${{ secrets.EMAIL_RECIPIENTS }}
           from: CI/CD Pipeline <${{ secrets.SENDGRID_VERIFIED_SENDER }}>
