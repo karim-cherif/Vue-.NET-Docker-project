@@ -91,20 +91,11 @@ jobs:
       - name: Get commit information
         id: commit_info
         run: |
-          echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
-          git log -n 5 --pretty=format:"- %h - %s (%an)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "COMMIT_LOG=$(git log -n 5 --pretty=format:'- %h - %s (%an)%0A' | sed ':a;N;$!ba;s/\n/%0A/g')" >> $GITHUB_OUTPUT
           echo "DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_OUTPUT
-      - name: Prepare email content
-        id: email_content
-        run: |
-          COMMIT_LOG=$(echo '${{ steps.commit_info.outputs.COMMIT_LOG }}' | sed 's/$/\\n/g')
-          echo "FORMATTED_COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
-          echo -e "$COMMIT_LOG" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
       - name: Send notification email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -128,7 +119,7 @@ jobs:
               </ul>
 
               <h3 style="color: #0066cc;">Recent Changes:</h3>
-              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">${{ steps.email_content.outputs.FORMATTED_COMMIT_LOG }}</pre>
+              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">${{ steps.commit_info.outputs.COMMIT_LOG }}</pre>
 
               <p><strong>Changes Summary:</strong> ${{ steps.commit_info.outputs.DIFF_SUMMARY }}</p>
 
