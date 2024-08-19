@@ -120,7 +120,7 @@ jobs:
           username: apikey
           password: ${{ secrets.SENDGRID_API_KEY }}
           subject: "CI/CD Pipeline: ${{ github.repository }} - ${{ steps.commit_details.outputs.COMMIT_MESSAGE }}"
-          body: |
+          html_body: |
             <h2>CI/CD Pipeline Notification</h2>
             <p><strong>Repository:</strong> ${{ github.repository }}</p>
             <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
