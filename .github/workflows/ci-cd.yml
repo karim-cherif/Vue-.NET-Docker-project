@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push backend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./Back-End
           push: true
@@ -57,7 +57,7 @@ jobs:
           cache-from: type=registry,ref=abdelkarim246/internship-back:latest
           cache-to: type=inline
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./Front-End
           push: true
@@ -91,9 +91,7 @@ jobs:
       - name: Get commit information
         id: commit_info
         run: |
-          echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
-          git log -n 5 --pretty=format:"- %h - %s (%an)" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "COMMIT_LOG=$(git log -n 5 --pretty=format:'- %h - %s (%an)' | base64 -w 0)" >> $GITHUB_OUTPUT
           echo "DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
           echo "LATEST_COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_OUTPUT
@@ -121,7 +119,7 @@ jobs:
               </ul>
 
               <h3 style="color: #0066cc;">Recent Changes:</h3>
-              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">${{ steps.commit_info.outputs.COMMIT_LOG }}</pre>
+              <pre style="background-color: #f4f4f4; padding: 10px; border-radius: 5px; white-space: pre-wrap;">{{ fromBase64( steps.commit_info.outputs.COMMIT_LOG ) }}</pre>
 
               <p><strong>Changes Summary:</strong> ${{ steps.commit_info.outputs.DIFF_SUMMARY }}</p>
 
