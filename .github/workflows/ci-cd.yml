@@ -149,7 +149,7 @@ jobs:
             const buildStatus = process.env.BUILD_STATUS;
             const imageStatus = process.env.IMAGE_STATUS;
             const deployStatus = process.env.DEPLOY_STATUS;
-            const commitLog = process.env.COMMIT_LOG.replace(/\n/g, '<br>');
+            const commitLog = process.env.COMMIT_LOG;
             const diffSummary = process.env.DIFF_SUMMARY;
 
             const htmlContent = `
