@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,6 +41,8 @@ jobs:
   build-and-push-images:
     needs: build-and-test
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
     steps:
       - uses: actions/checkout@v4
 
@@ -65,6 +69,8 @@ jobs:
   deploy:
     needs: build-and-push-images
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ job.status }}
     steps:
       - name: Azure login
         uses: azure/login@v2
@@ -92,9 +98,14 @@ jobs:
               --image abdelkarim246/internship-front:latest
 
   notify:
-    needs: deploy
+    needs: [build-and-test, build-and-push-images, deploy]
     runs-on: ubuntu-latest
     if: always()
+    env:
+      BUILD_STATUS: ${{ needs.build-and-test.outputs.status }}
+      IMAGE_STATUS: ${{ needs.build-and-push-images.outputs.status }}
+      DEPLOY_STATUS: ${{ needs.deploy.outputs.status }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -104,36 +115,95 @@ jobs:
       - name: Get commit changes
         id: get_changes
         run: |
-          COMMIT_LOG=$(git log -n 5 --pretty=format:"%h - %s")
+          COMMIT_LOG=$(git log -n 5 --pretty=format:"%h - %s (%an)")
           echo "COMMIT_LOG<<EOF" >> $GITHUB_OUTPUT
           echo "$COMMIT_LOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Get diff summary
+        id: diff_summary
+        run: |
+          DIFF_SUMMARY=$(git diff --stat HEAD~1 HEAD | tail -n 1)
+          echo "DIFF_SUMMARY=$DIFF_SUMMARY" >> $GITHUB_OUTPUT
+
       - name: Send notification email
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const sgMail = require('@sendgrid/mail');
             sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+            function getStatusEmoji(status) {
+              switch(status) {
+                case 'success': return '✅';
+                case 'failure': return '❌';
+                case 'cancelled': return '⚠️';
+                default: return '❓';
+              }
+            }
+
+            const buildStatus = process.env.BUILD_STATUS;
+            const imageStatus = process.env.IMAGE_STATUS;
+            const deployStatus = process.env.DEPLOY_STATUS;
+
+            const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>CI/CD Pipeline Status</title>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                h1 { color: #0066cc; }
+                .status { margin-bottom: 20px; }
+                .changes { background-color: #f4f4f4; padding: 15px; border-radius: 5px; }
+                .footer { margin-top: 20px; font-size: 0.9em; color: #666; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <h1>CI/CD Pipeline Status for ${{ github.repository }}</h1>
+                <div class="status">
+                  <p><strong>Build and Test:</strong> ${getStatusEmoji(buildStatus)} ${buildStatus}</p>
+                  <p><strong>Build and Push Images:</strong> ${getStatusEmoji(imageStatus)} ${imageStatus}</p>
+                  <p><strong>Deploy:</strong> ${getStatusEmoji(deployStatus)} ${deployStatus}</p>
+                </div>
+                <div class="changes">
+                  <h2>Recent Changes</h2>
+                  <pre>${'${{ steps.get_changes.outputs.COMMIT_LOG }}'.replace(/\n/g, '<br>')}</pre>
+                  <p><strong>Summary:</strong> ${{ steps.diff_summary.outputs.DIFF_SUMMARY }}</p>
+                </div>
+                <div class="footer">
+                  <p>For more details, please check: <a href="${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}">${'${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'}</a></p>
+                </div>
+              </div>
+            </body>
+            </html>
+            `;
+
             const msg = {
               to: '${{ secrets.EMAIL_RECIPIENTS }}',
-              from: '${{ secrets.SENDGRID_VERIFIED_SENDER }}',
+              from: {
+                email: '${{ secrets.SENDGRID_VERIFIED_SENDER }}',
+                name: 'CI/CD Pipeline Notifier'
+              },
               subject: 'CI/CD Pipeline Status for ${{ github.repository }}',
-              text: `
-                CI/CD Pipeline for ${{ github.repository }} has completed.
-
-                Status:
-                - Build and Test: ${{ needs.build-and-test.result }}
-                - Build and Push Images: ${{ needs.build-and-push-images.result }}
-                - Deploy: ${{ needs.deploy.result }}
-
-                Recent changes:
-                ${{ steps.get_changes.outputs.COMMIT_LOG }}
-
-                For more details, please check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-              `,
+              text: 'This is an HTML email. Please use an HTML-capable email client to view it.',
+              html: htmlContent,
             };
-            await sgMail.send(msg);
+
+            try {
+              await sgMail.send(msg);
+              console.log('Email sent successfully');
+            } catch (error) {
+              console.error('Error sending email:', error);
+              if (error.response) {
+                console.error(error.response.body);
+              }
+              throw error;
+            }
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
