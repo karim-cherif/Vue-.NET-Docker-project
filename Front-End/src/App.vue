@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <router-link class="navbar-brand" to="/">Person Manager</router-link>
         <div class="navbar-nav">
-          <router-link class="nav-link" to="/">Home</router-link>
+          <router-link class="nav-link" to="/">Home1</router-link>
           <router-link class="nav-link" to="/create">Create Person</router-link>
         </div>
       </div>
