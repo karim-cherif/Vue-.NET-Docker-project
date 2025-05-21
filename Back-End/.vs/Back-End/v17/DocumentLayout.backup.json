@@ -3,8 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\models\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:models\\person.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\repositories\\personrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:repositories\\personrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\back-end.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:back-end.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|c:\\users\\abdel\\onedrive\\desktop\\internship project 2\\back-end\\back-end.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{FB0B2FF6-DFF5-4B7C-AA80-562050F3585E}|Back-End.csproj|solutionrelative:back-end.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,21 +42,110 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d84ee353-0bef-5a41-a649-8f89aca5d84d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Back-End.http",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Back-End.http",
+              "RelativeDocumentMoniker": "Back-End.http",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Back-End.http",
+              "RelativeToolTip": "Back-End.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-02-07T22:10:52.267Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PersonRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Repositories\\PersonRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\PersonRepository.cs",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Repositories\\PersonRepository.cs",
+              "RelativeToolTip": "Repositories\\PersonRepository.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAA3wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T21:52:15.94Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PersonController.cs",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Controllers\\PersonController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PersonController.cs",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Controllers\\PersonController.cs",
+              "RelativeToolTip": "Controllers\\PersonController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T21:39:25.22Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Back-End.csproj",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Back-End.csproj",
+              "RelativeDocumentMoniker": "Back-End.csproj",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Back-End.csproj",
+              "RelativeToolTip": "Back-End.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-02-07T21:32:12.321Z"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-02-07T21:26:54.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Person.cs",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Models\\Person.cs",
+              "RelativeDocumentMoniker": "Models\\Person.cs",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Models\\Person.cs",
+              "RelativeToolTip": "Models\\Person.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T21:25:24.803Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApplicationDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Data\\ApplicationDBContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDBContext.cs",
+              "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Data\\ApplicationDBContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T21:23:58.876Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\Abdel\\OneDrive\\Desktop\\Internship project 2\\Back-End\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-13T01:49:11.58Z",
               "EditorCaption": ""
